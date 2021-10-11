@@ -1,30 +1,30 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "adDomainName": {
-      "value": "GET-PREREQ-domainName"
-    },
-    "adVnetName": {
-      "value": "GET-PREREQ-virtualNetworkName" 
-    },
-    "adVnetRG": {
-      "value": "GET-PREREQ-virtualNetworkResourceGroupName" 
-    },
-    "adVnetSubscriptionId": {
-      "value": "GET-PREREQ-virtualNetworkSubscriptionId" 
-    },
-    "adSubnetName": {
-      "value": "GET-PREREQ-virtualNetworkSubnetName"
-    },
-    "dnsServerPrivateIp": {
-      "value": "GET-PREREQ-dnsIpAddress"
-    },
-    "adminUsername": {
-      "value": "quickstarts"
-    },
-    "adminPassword": {
-      "reference": "GEN-KEYVAULT-PASSWORD-REFERENCE" 
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "adDomainName": {
+        "value": "mchestpharmacy.onmicrosoft.com"
+      },
+      "adVnetName": {
+        "value": "central-trust-vnet" 
+      },
+      "adVnetRG": {
+        "value": "central-trust-rg" 
+      },
+      "adVnetSubscriptionId": {
+        "value": "24e8c694-b55a-4b11-8f2b-072b7505f272" 
+      },
+      "adSubnetName": {
+        "value": "central-trust-rds-snet"
+      },
+      "dnsServerPrivateIp": {
+        "value": "10.146.0.4"
+      },
+      "adminUsername": {
+        "value": "ntirety"
+      },
+      "adminPassword": {
+        "value": "EAKRcqlL2ObqyztZ" 
+      }
     }
   }
-}
