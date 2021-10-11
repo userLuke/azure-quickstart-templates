@@ -648,7 +648,7 @@
                     "properties": {
                         "adminCreds": {
                             "UserName": "[parameters('adminUsername')]",
-                            "Password": "[parameters('adminPassword')]"
+                            "Password": "PrivateSettingsRef:AdminPassword"
                         },
                         "connectionBroker": "[concat('broker.',parameters('adDomainName'))]",
                         "domainName": "[parameters('adDomainName')]",
