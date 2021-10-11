@@ -24,7 +24,7 @@
         "value": "ntirety"
       },
       "adminPassword": {
-        "value": "EAKRcqlL2ObqyztZ" 
+        "reference": "GEN-KEYVAULT-PASSWORD-REFERENCE" 
       }
     }
   }
