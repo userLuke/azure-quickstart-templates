@@ -256,7 +256,7 @@
                             "idleTimeoutInMinutes": 5,
                             "loadDistribution": "SourceIPProtocol",
                             "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'tcentral-rds-lb-probe443')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'central-rds-lb-probe443')]"
                             }
                         }
                     },
