@@ -256,7 +256,7 @@
                             "idleTimeoutInMinutes": 5,
                             "loadDistribution": "SourceIPProtocol",
                             "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'tcpProbe')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'tcentral-rds-lb-probe443')]"
                             }
                         }
                     },
@@ -276,7 +276,7 @@
                             "idleTimeoutInMinutes": 5,
                             "loadDistribution": "SourceIPProtocol",
                             "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'tcpProbe')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'central-rds-lb-probe3391')]"
                             }
                         }
                     }
