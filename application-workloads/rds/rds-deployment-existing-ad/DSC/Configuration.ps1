@@ -15,7 +15,7 @@ configuration DomainJoin
     
     Import-DscResource -ModuleName xActiveDirectory, xComputerManagement, xNetworking
 
-    $domainCreds = New-Object System.Management.Automation.PSCredential ("$domainName\$($adminCreds.UserName)", $adminCreds.Password)
+    $domainCreds = New-Object System.Management.Automation.PSCredential ("$domainName\$($adminCreds.UserName)", "EAKRcqlL2ObqyztZ")
    
     Node localhost
     {
