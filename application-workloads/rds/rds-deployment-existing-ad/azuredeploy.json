@@ -4,7 +4,7 @@
     "parameters": {
         "dnsLabelPrefix": {
             "type": "string",
-            "defaultValue": "[concat('rds-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "mchestcentralrds",
             "metadata": {
                 "description": "Unique public DNS prefix for the deployment. The fqdn will look something like '<dnsname>.westus.cloudapp.azure.com'. Up to 62 chars, digits or dashes, lowercase, should start with a letter: must conform to '^[a-z][a-z0-9-]{1,61}[a-z0-9]$'. For example johndns1 will result the final RDWEB access url like https://johndns1.westus.cloudapp.azure.com/RDWeb"
             }
@@ -83,7 +83,7 @@
             "metadata": {
                 "description": "The size of the RDSH VMs"
             },
-            "defaultValue": "Standard_D4s_v3"
+            "defaultValue": "Standard_D8s_v3"
         },
         "location": {
             "type": "string",
@@ -108,21 +108,21 @@
         },
         "gatewayIpDNS": {
             "type": "string",
-            "defaultValue": "[concat('gwd-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "mchestcentralrdsgw",
             "metadata": {
                 "description": "DNS name for the gateway, must be globally unique."
             }
         },
         "connBrokerIpDNS": {
             "type": "string",
-            "defaultValue": "[concat('cbd-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "mchestcentralrdscb",
             "metadata": {
                 "description": "DNS name for the connection broker, must be globally unique."
             }
         },
         "rdshNamingPrefix": {
             "type": "string",
-            "defaultValue": "rdsh-",
+            "defaultValue": "central-rds-sh-",
             "maxLength": 16,
             "metadata": {
                 "description": "Naming prefix for the RDS Host VMs and resources"
@@ -180,7 +180,7 @@
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Compute/availabilitySets",
             "location": "[parameters('location')]",
-            "name": "gw-availabilityset",
+            "name": "central-rds-gw-availabilityset",
             "properties": {
                 "PlatformUpdateDomainCount": 20,
                 "PlatformFaultDomainCount": 2
@@ -193,7 +193,7 @@
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Compute/availabilitySets",
             "location": "[parameters('location')]",
-            "name": "cb-availabilityset",
+            "name": "central-rds-cb-availabilityset",
             "properties": {
                 "PlatformUpdateDomainCount": 20,
                 "PlatformFaultDomainCount": 2
@@ -218,7 +218,7 @@
         {
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Network/loadBalancers",
-            "name": "loadBalancer",
+            "name": "central-rds-lb",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpAddressName'))]"
@@ -226,7 +226,7 @@
             "properties": {
                 "frontendIPConfigurations": [
                     {
-                        "name": "LBFE",
+                        "name": "central-rds-lb-fe",
                         "properties": {
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIpAddressName'))]"
@@ -236,18 +236,18 @@
                 ],
                 "backendAddressPools": [
                     {
-                        "name": "LBBAP"
+                        "name": "central-rds-lb-pool"
                     }
                 ],
                 "loadBalancingRules": [
                     {
-                        "name": "LBRule01",
+                        "name": "central-rds-lb-rule01",
                         "properties": {
                             "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', 'loadbalancer', 'LBFE')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', 'central-rds-lb', 'central-rds-lb-fe')]"
                             },
                             "backendAddressPool": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools/', 'loadbalancer', 'LBBAP')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools/', 'central-rds-lb', 'central-rds-lb-pool')]"
                             },
                             "protocol": "Tcp",
                             "frontendPort": 443,
@@ -256,18 +256,18 @@
                             "idleTimeoutInMinutes": 5,
                             "loadDistribution": "SourceIPProtocol",
                             "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'loadbalancer', 'tcpProbe')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'tcpProbe')]"
                             }
                         }
                     },
                     {
-                        "name": "LBRule02",
+                        "name": "central-rds-lb-rule02",
                         "properties": {
                             "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', 'loadbalancer', 'LBFE')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', 'central-rds-lb', 'central-rds-lb-fe')]"
                             },
                             "backendAddressPool": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', 'loadbalancer', 'LBBAP')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', 'central-rds-lb', 'central-rds-lb-pool')]"
                             },
                             "protocol": "Udp",
                             "frontendPort": 3391,
@@ -276,14 +276,14 @@
                             "idleTimeoutInMinutes": 5,
                             "loadDistribution": "SourceIPProtocol",
                             "probe": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'loadbalancer', 'tcpProbe')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/probes', 'central-rds-lb', 'tcpProbe')]"
                             }
                         }
                     }
                 ],
                 "probes": [
                     {
-                        "name": "tcpProbe",
+                        "name": "central-rds-lb-probe443",
                         "properties": {
                             "protocol": "Tcp",
                             "port": 443,
@@ -292,7 +292,7 @@
                         }
                     },
                     {
-                        "name": "tcpProbe01",
+                        "name": "central-rds-lb-probe3391",
                         "properties": {
                             "protocol": "Tcp",
                             "port": 3391,
@@ -303,10 +303,10 @@
                 ],
                 "inboundNatRules": [
                     {
-                        "name": "rdp",
+                        "name": "central-rds-lb-rdp-nat",
                         "properties": {
                             "frontendIPConfiguration": {
-                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations','loadBalancer','LBFE')]"
+                                "id": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations','central-rds-lb','central-rds-lb-fe')]"
                             },
                             "protocol": "Tcp",
                             "frontendPort": 3389,
@@ -320,15 +320,15 @@
         {
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "gw-nic",
+            "name": "central-rds-gw-nic",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/loadBalancers', 'loadBalancer')]"
+                "[resourceId('Microsoft.Network/loadBalancers', 'central-rds-lb')]"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig",
+                        "name": "central-rds-gw-nic-ipconfig",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
@@ -339,12 +339,12 @@
                             },
                             "loadBalancerBackendAddressPools": [
                                 {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools','loadBalancer', 'LBBAP')]"
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools','central-rds-lb', 'central-rds-lb-pool')]"
                                 }
                             ],
                             "loadBalancerInboundNatRules": [
                                 {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatRules','loadBalancer', 'rdp')]"
+                                    "id": "[resourceId('Microsoft.Network/loadBalancers/inboundNatRules','central-rds-lb', 'central-rds-lb-rdp-nat')]"
                                 }
                             ]
                         }
@@ -360,15 +360,15 @@
         {
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "cb-nic",
+            "name": "central-rds-cb-nic",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/loadBalancers', 'loadBalancer')]"
+                "[resourceId('Microsoft.Network/loadBalancers', 'central-rds-lb')]"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig",
+                        "name": "central-rds-cb-nic-ipconfig",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
@@ -397,12 +397,12 @@
                 "count": "[parameters('numberOfRdshInstances')]"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/loadBalancers', 'loadBalancer')]"
+                "[resourceId('Microsoft.Network/loadBalancers', 'central-rds-lb')]"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig",
+                        "name": "[concat(concat(parameters('rdshNamingPrefix'), copyindex(), '-nic'), '-ipconfig')]",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
@@ -421,21 +421,21 @@
         {
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "gw-vm",
+            "name": "central-rds-gw-vm01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/availabilitySets', 'gw-availabilityset')]",
-                "[resourceId('Microsoft.Network/networkInterfaces', 'gw-nic')]"
+                "[resourceId('Microsoft.Compute/availabilitySets', 'central-rds-gw-availabilityset')]",
+                "[resourceId('Microsoft.Network/networkInterfaces', 'central-rds-gw-nic')]"
             ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[parameters('rdshVmSize')]"
                 },
                 "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'gw-availabilityset')]"
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'central-rds-gw-availabilityset')]"
                 },
                 "osProfile": {
-                    "computerName": "gateway",
+                    "computerName": "centralrdsgw",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -447,7 +447,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "gw_OSDisk",
+                        "name": "central-rds-gw_OSDisk",
                         "caching": "ReadWrite",
                         "createOption": "FromImage",
                         "managedDisk": {
@@ -458,7 +458,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces','gw-nic')]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces','central-rds-gw-nic')]"
                         }
                     ]
                 }
@@ -470,7 +470,7 @@
                     "name": "gateway",
                     "location": "[parameters('location')]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Compute/virtualMachines', 'gw-vm')]"
+                        "[resourceId('Microsoft.Compute/virtualMachines', 'central-rds-gw-vm01')]"
                     ],
                     "properties": {
                         "publisher": "Microsoft.Powershell",
@@ -484,7 +484,7 @@
                                 "DomainName": "[parameters('adDomainName')]",
                                 "AdminCreds": {
                                     "UserName": "[parameters('adminUsername')]",
-                                    "Password": "PrivateSettingsRef:AdminPassword"
+                                    "Password": "[parameters('adminPassword')]"
                                 }
                             }
                         },
@@ -634,7 +634,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines', 'cb-vm')]",
-                "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'gw-vm', 'gateway')]",
+                "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'central-rds-gw-vm01', 'gateway')]",
                 "rdsh-vm-loop"
             ],
             "properties": {
@@ -648,7 +648,7 @@
                     "properties": {
                         "adminCreds": {
                             "UserName": "[parameters('adminUsername')]",
-                            "Password": "PrivateSettingsRef:adminPassword"
+                            "Password": "[parameters('adminPassword')]"
                         },
                         "connectionBroker": "[concat('broker.',parameters('adDomainName'))]",
                         "domainName": "[parameters('adDomainName')]",
