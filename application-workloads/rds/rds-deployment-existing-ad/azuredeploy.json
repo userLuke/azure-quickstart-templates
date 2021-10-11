@@ -586,7 +586,7 @@
             "name": "cb-vm",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/availabilitySets', 'cb-availabilityset')]",
+                "[resourceId('Microsoft.Compute/availabilitySets', 'central-rds-cb-availabilityset')]",
                 "[resourceId('Microsoft.Network/networkInterfaces', 'cb-nic')]",
                 "rdsh-vm-loop"
             ],
@@ -595,7 +595,7 @@
                     "vmSize": "[parameters('rdshVmSize')]"
                 },
                 "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'cb-availabilityset')]"
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', 'central-rds-cb-availabilityset')]"
                 },
                 "osProfile": {
                     "computerName": "broker",
