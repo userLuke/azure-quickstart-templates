@@ -583,11 +583,11 @@
         {
             "apiVersion": "2020-06-01",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "cb-vm",
+            "name": "central-rds-cb-vm01",
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/availabilitySets', 'central-rds-cb-availabilityset')]",
-                "[resourceId('Microsoft.Network/networkInterfaces', 'cb-nic')]",
+                "[resourceId('Microsoft.Network/networkInterfaces', 'central-rds-cb-nic')]",
                 "rdsh-vm-loop"
             ],
             "properties": {
@@ -621,7 +621,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces','cb-nic')]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces','central-rds-cb-nic')]"
                         }
                     ]
                 }
@@ -629,11 +629,11 @@
         },
         {
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "cb-vm/rdsdeployment",
+            "name": "central-rds-cb-vm01/rdsdeployment",
             "apiVersion": "2020-06-01",
             "location": "[parameters('location')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', 'cb-vm')]",
+                "[resourceId('Microsoft.Compute/virtualMachines', 'central-rds-cb-vm01')]",
                 "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'central-rds-gw-vm01', 'gateway')]",
                 "rdsh-vm-loop"
             ],
