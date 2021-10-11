@@ -484,7 +484,7 @@
                                 "DomainName": "[parameters('adDomainName')]",
                                 "AdminCreds": {
                                     "UserName": "[parameters('adminUsername')]",
-                                    "Password": "[parameters('adminPassword')]"
+                                    "Password": "PrivateSettingsRef:AdminPassword"
                                 }
                             }
                         },
