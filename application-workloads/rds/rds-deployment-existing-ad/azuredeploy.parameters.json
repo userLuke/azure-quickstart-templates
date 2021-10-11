@@ -24,7 +24,11 @@
         "value": "ntirety"
       },
       "adminPassword": {
-        "reference": "password" 
+        "reference": {
+          "keyVault": {
+          "id": "/subscriptions/24e8c694-b55a-4b11-8f2b-072b7505f272/resourceGroups/central-ntirety-depoyment-rg/providers/Microsoft.KeyVault/vaults/ntiretyDeploymentVault"
+        },
+        "secretName": "password"
       }
     }
   }
