@@ -655,7 +655,7 @@
                         "externalfqdn": "[reference(variables('gatewayPublicIpAddressName')).dnsSettings.fqdn]",
                         "numberOfRdshInstances": "[parameters('numberOfRdshInstances')]",
                         "sessionHostNamingPrefix": "[parameters('rdshNamingPrefix')]",
-                        "webAccessServer": "[concat('gateway.',parameters('adDomainName'))]"
+                        "webAccessServer": "[concat('centralrdsgw.',parameters('adDomainName'))]"
                     }
                 },
                 "protectedSettings": {
