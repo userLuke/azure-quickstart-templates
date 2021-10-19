@@ -73,7 +73,7 @@
         },
         "numberOfRdshInstances": {
             "type": "int",
-            "defaultValue": 1,
+            "defaultValue": 8,
             "metadata": {
                 "description": "Number of RemoteDesktopSessionHosts"
             }
@@ -122,7 +122,7 @@
         },
         "rdshNamingPrefix": {
             "type": "string",
-            "defaultValue": "rdsh-",
+            "defaultValue": "centralrdsh-",
             "maxLength": 16,
             "metadata": {
                 "description": "Naming prefix for the RDS Host VMs and resources"
@@ -134,9 +134,9 @@
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
         "subnet-id": "[resourceId(parameters('adVnetSubscriptionId'), parameters('adVnetRG'),'Microsoft.Network/virtualNetworks/subnets', parameters('adVnetName'), parameters('adSubnetName'))]",
-        "publicIpAddressName": "publicIp",
-        "gatewayPublicIpAddressName": "gatewayPublicIp",
-        "brokerPublicIpAddressName": "brokerPublicIp"
+        "publicIpAddressName": "central-rds-lb_publicip",
+        "gatewayPublicIpAddressName": "central-rds-gw_publicip",
+        "brokerPublicIpAddressName": "central-rds-cb_publicip"
 
     },
     "resources": [
@@ -598,7 +598,7 @@
                     "id": "[resourceId('Microsoft.Compute/availabilitySets', 'central-rds-cb-availabilityset')]"
                 },
                 "osProfile": {
-                    "computerName": "broker",
+                    "computerName": "centralrdscb",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -650,7 +650,7 @@
                             "UserName": "[parameters('adminUsername')]",
                             "Password": "PrivateSettingsRef:AdminPassword"
                         },
-                        "connectionBroker": "[concat('broker.',parameters('adDomainName'))]",
+                        "connectionBroker": "[concat('centralrdscb.',parameters('adDomainName'))]",
                         "domainName": "[parameters('adDomainName')]",
                         "externalfqdn": "[reference(variables('gatewayPublicIpAddressName')).dnsSettings.fqdn]",
                         "numberOfRdshInstances": "[parameters('numberOfRdshInstances')]",
