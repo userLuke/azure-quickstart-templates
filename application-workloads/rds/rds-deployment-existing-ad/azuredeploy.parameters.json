@@ -1,35 +1,35 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "adDomainName": {
-        "value": "mchestpharmacy.onmicrosoft.com"
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adDomainName": {
+      "value": "mchest.net"
+    },
+    "adVnetName": {
+      "value": "central-trust-vnet" 
+    },
+    "adVnetRG": {
+      "value": "central-trust-rg" 
+    },
+    "adVnetSubscriptionId": {
+      "value": "24e8c694-b55a-4b11-8f2b-072b7505f272" 
+    },
+    "adSubnetName": {
+      "value": "central-trust-rds-snet"
+    },
+    "dnsServerPrivateIp": {
+      "value": "10.146.0.6"
+    },
+    "adminUsername": {
+      "value": "ntiretyadmin"
+    },
+    "adminPassword": {
+      "reference": {
+        "keyVault": {
+        "id": "/subscriptions/24e8c694-b55a-4b11-8f2b-072b7505f272/resourceGroups/central-ntirety-deployment-rg/providers/Microsoft.KeyVault/vaults/ntiretyDeploymentVault"
       },
-      "adVnetName": {
-        "value": "central-trust-vnet" 
-      },
-      "adVnetRG": {
-        "value": "central-trust-rg" 
-      },
-      "adVnetSubscriptionId": {
-        "value": "24e8c694-b55a-4b11-8f2b-072b7505f272" 
-      },
-      "adSubnetName": {
-        "value": "central-trust-rds-snet"
-      },
-      "dnsServerPrivateIp": {
-        "value": "10.146.0.4"
-      },
-      "adminUsername": {
-        "value": "ntirety"
-      },
-      "adminPassword": {
-        "reference": {
-          "keyVault": {
-          "id": "/subscriptions/24e8c694-b55a-4b11-8f2b-072b7505f272/resourceGroups/central-ntirety-deployment-rg/providers/Microsoft.KeyVault/vaults/ntiretyDeploymentVault"
-        },
-        "secretName": "password"
-        }
+      "secretName": "password"
       }
     }
+  }
 }
